@@ -1,5 +1,6 @@
 import './styles.css';
 import { CurrentConditions, Days, Hours } from './constructorFunctions';
+import { initializeFormHandler } from './form';
 const WEATHERAPIKEY = 'GRUJ8YUSWV9C7U29H4QTGHSUX';
 
 async function getWeatherData(location) {
@@ -24,7 +25,7 @@ function getToday() {
 
   return today;
 }
-async function extractData(location) {
+export async function extractData(location) {
   const data = await getWeatherData(location);
   const currentConditions = new CurrentConditions(
     data.currentConditions.conditions,
@@ -67,5 +68,6 @@ async function extractData(location) {
   });
   return { currentConditions, dayArray };
 }
-const { currentConditions, dayArray } = await extractData('istanbul');
-console.log(currentConditions, dayArray);
+// const { currentConditions, dayArray } = await extractData('istanbul');
+// console.log(currentConditions, dayArray);
+initializeFormHandler();
