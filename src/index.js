@@ -1,9 +1,11 @@
 import './styles.css';
 import { CurrentConditions, Days, Hours } from './constructorFunctions';
 import { initializeFormHandler } from './form';
+import { weatherIconMapping } from './weatherIcons';
+
 const WEATHERAPIKEY = 'GRUJ8YUSWV9C7U29H4QTGHSUX';
 
-async function getWeatherData(location) {
+export async function getWeatherData(location) {
   try {
     const today = getToday();
     const futureDateUnformat = new Date();
@@ -25,8 +27,13 @@ function getToday() {
 
   return today;
 }
-export async function extractData(location) {
-  const data = await getWeatherData(location);
+function changeIconCamelCase(icon) {
+  const camelCaseIconId = icon
+    .replace(/-([a-z])/g, (_, char) => char.toUpperCase())
+    .replace(/-/g, '');
+  return camelCaseIconId;
+}
+export function extractData(data) {
   const currentConditions = new CurrentConditions(
     data.currentConditions.conditions,
     data.resolvedAddress,
@@ -37,7 +44,8 @@ export async function extractData(location) {
     data.description,
     data.currentConditions.sunrise,
     data.currentConditions.sunset,
-    data.currentConditions.datetime
+    data.currentConditions.datetime,
+    changeIconCamelCase(data.currentConditions.icon)
   );
   const dayArray = [];
 
@@ -49,7 +57,8 @@ export async function extractData(location) {
       day.conditions,
       day.precipprob,
       day.tempmax,
-      day.tempmin
+      day.tempmin,
+      changeIconCamelCase(day.icon)
     );
 
     day.hours.forEach((hour) => {
@@ -57,8 +66,10 @@ export async function extractData(location) {
         hour.datetime,
         hour.precipprob,
         hour.temp,
-        hour.conditions
+        hour.conditions,
+        hour.icon
       );
+      hourObject.icon = changeIconCamelCase(hourObject.icon);
       hoursArray.push(hourObject);
     });
 
@@ -68,6 +79,22 @@ export async function extractData(location) {
   });
   return { currentConditions, dayArray };
 }
-// const { currentConditions, dayArray } = await extractData('istanbul');
-// console.log(currentConditions, dayArray);
+export function chooseIcon(currentConditions, dayArray) {
+  const currentConditionImg = document.querySelector('#current-condition-img');
+  currentConditionImg.src = weatherIconMapping[currentConditions.icon];
+
+  const daysImage = document.querySelectorAll('.days-image');
+  dayArray.forEach((day, index) => {
+    if (index < daysImage.length) {
+      daysImage[index].src = weatherIconMapping[day.icon];
+    }
+  });
+  const hourlyWeatherContainer = document.querySelectorAll('.hours-image');
+  const hoursToDisplay = 24;
+  const hour = parseInt(currentConditions.dateTime.slice(0, 2));
+}
+
 initializeFormHandler();
+const data = await getWeatherData('istanbul');
+console.log(data);
+console.log(extractData(data));

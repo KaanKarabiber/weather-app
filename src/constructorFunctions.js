@@ -8,7 +8,8 @@ export function CurrentConditions(
   description,
   sunrise,
   sunset,
-  dateTime
+  dateTime,
+  icon
 ) {
   this.conditions = conditions;
   this.resolvedAddress = resolvedAddress;
@@ -20,6 +21,7 @@ export function CurrentConditions(
   this.sunrise = sunrise;
   this.sunset = sunset;
   this.dateTime = dateTime;
+  this.icon = icon;
 }
 export function Days(
   date,
@@ -27,6 +29,7 @@ export function Days(
   precipProb,
   tempmax,
   tempmin,
+  icon,
   hours = []
 ) {
   this.date = date;
@@ -34,11 +37,13 @@ export function Days(
   this.preciProb = precipProb;
   this.tempmax = tempmax;
   this.tempmin = tempmin;
+  this.icon = icon;
   this.hours = hours;
 }
-export function Hours(dateTime, precipProb, temp, condition) {
+export function Hours(dateTime, precipProb, temp, condition, icon) {
   this.dateTime = dateTime;
   this.preciProb = precipProb;
   this.temp = temp;
   this.condition = condition;
+  this.icon = icon;
 }
