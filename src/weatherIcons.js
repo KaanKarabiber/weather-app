@@ -29,3 +29,34 @@ export const weatherIconMapping = {
   showersDay: rainImage,
   showersNight: rainImage,
 };
+
+export function chooseIcon(currentConditions, dayArray) {
+  const currentConditionImg = document.querySelector('#current-condition-img');
+  currentConditionImg.src = weatherIconMapping[currentConditions.icon];
+
+  const daysImage = document.querySelectorAll('.days-image');
+  dayArray.forEach((day, index) => {
+    if (index < daysImage.length) {
+      daysImage[index].src = weatherIconMapping[day.icon];
+    }
+  });
+
+  const hourlyWeatherContainer = document.querySelectorAll('.hours-image');
+  const hoursToDisplay = 24;
+  const currentHour = parseInt(currentConditions.dateTime.slice(0, 2));
+
+  let currentDayIndex = 0;
+  let currentHourIndex = currentHour;
+
+  for (let i = 0; i < hoursToDisplay; i++) {
+    if (currentHourIndex >= 24) {
+      currentDayIndex++;
+      currentHourIndex = 0;
+    }
+    const currentHourData = dayArray[currentDayIndex].hours[currentHourIndex];
+    if (i < hourlyWeatherContainer.length) {
+      hourlyWeatherContainer[i].src = weatherIconMapping[currentHourData.icon];
+    }
+    currentHourIndex++;
+  }
+}

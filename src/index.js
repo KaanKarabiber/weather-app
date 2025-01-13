@@ -1,7 +1,6 @@
 import './styles.css';
 import { CurrentConditions, Days, Hours } from './constructorFunctions';
 import { initializeFormHandler } from './form';
-import { weatherIconMapping } from './weatherIcons';
 
 const WEATHERAPIKEY = 'GRUJ8YUSWV9C7U29H4QTGHSUX';
 
@@ -79,22 +78,7 @@ export function extractData(data) {
   });
   return { currentConditions, dayArray };
 }
-export function chooseIcon(currentConditions, dayArray) {
-  const currentConditionImg = document.querySelector('#current-condition-img');
-  currentConditionImg.src = weatherIconMapping[currentConditions.icon];
-
-  const daysImage = document.querySelectorAll('.days-image');
-  dayArray.forEach((day, index) => {
-    if (index < daysImage.length) {
-      daysImage[index].src = weatherIconMapping[day.icon];
-    }
-  });
-  const hourlyWeatherContainer = document.querySelectorAll('.hours-image');
-  const hoursToDisplay = 24;
-  const hour = parseInt(currentConditions.dateTime.slice(0, 2));
-}
-
 initializeFormHandler();
-const data = await getWeatherData('istanbul');
-console.log(data);
-console.log(extractData(data));
+// const data = await getWeatherData('istanbul');
+// console.log(data);
+// console.log(extractData(data));

@@ -1,4 +1,5 @@
-import { chooseIcon, extractData, getWeatherData } from '.';
+import { extractData, getWeatherData } from '.';
+import { chooseIcon } from './weatherIcons';
 
 export async function initializeFormHandler() {
   const form = document.querySelector('form');
@@ -11,7 +12,6 @@ export async function initializeFormHandler() {
       try {
         const data = await getWeatherData(inputText.value);
         const { currentConditions, dayArray } = extractData(data);
-        console.log(currentConditions, dayArray);
         chooseIcon(currentConditions, dayArray);
       } catch (error) {
         console.error('Error fetching data:', error);
