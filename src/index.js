@@ -4,6 +4,13 @@ import { initializeFormHandler } from './form';
 
 const WEATHERAPIKEY = 'GRUJ8YUSWV9C7U29H4QTGHSUX';
 
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}-${month}-${year}`;
+}
 export async function getWeatherData(location) {
   try {
     const today = getToday();
@@ -50,9 +57,9 @@ export function extractData(data) {
 
   data.days.forEach((day) => {
     const hoursArray = [];
-
+    const formattedDate = formatDate(day.datetime);
     const dayObject = new Days(
-      day.datetime,
+      formattedDate,
       day.conditions,
       day.precipprob,
       day.tempmax,
@@ -76,9 +83,32 @@ export function extractData(data) {
 
     dayArray.push(dayObject);
   });
+  currentConditions.preciProb = roundDownValue(currentConditions.preciProb);
+
+  dayArray.forEach((day) => {
+    day.preciProb = roundDownValue(day.preciProb);
+    day.tempmax = roundDownValue(day.tempmax);
+    day.tempmin = roundDownValue(day.tempmin);
+
+    day.hours.forEach((hour) => {
+      hour.preciProb = roundDownValue(hour.preciProb);
+      hour.temp = roundDownValue(hour.temp);
+    });
+  });
+
   return { currentConditions, dayArray };
 }
+function roundDownValue(value) {
+  if (typeof value === 'number') {
+    if (Number.isNaN(value)) {
+      console.warn('Invalid number encountered: ', value);
+      return 0;
+    }
+  } else if (typeof value === 'string' && !/^\d+(\.\d+)?$/.test(value)) {
+    console.warn('Invalid string encountered: ', value);
+    return 0;
+  }
+  return Math.floor(parseFloat(value));
+}
+
 initializeFormHandler();
-// const data = await getWeatherData('istanbul');
-// console.log(data);
-// console.log(extractData(data));
