@@ -70,7 +70,6 @@ export function displayValues(currentConditions, dayArray) {
     const temp = document.createElement('p');
     temp.textContent = `${currentHourData.temp}`;
 
-    console.log(currentHourData);
     currentHourIndex++;
     hourContainer[i].append(condition, time, precipProb, temp);
   }
