@@ -15,6 +15,7 @@ export async function initializeFormHandler() {
         const { currentConditions, dayArray } = extractData(data);
         chooseIcon(currentConditions, dayArray);
         displayValues(currentConditions, dayArray);
+        inputText.value = '';
       } catch (error) {
         console.error('Error fetching data:', error);
       }
