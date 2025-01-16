@@ -1,15 +1,33 @@
+import {
+  celciusToFahrenheit,
+  fahrenheitToCelcius,
+  milesToKm,
+  kmToMiles,
+} from './index.js';
+
 export function displayValues(currentConditions, dayArray) {
+  const toggleSwitch = document.querySelector('#toggle-switch');
+
   const currentConditionsP = document.querySelector('#current-conditions-p');
   currentConditionsP.textContent = currentConditions.conditions;
 
   const resolvedAddress = document.querySelector('#resolved-address');
   resolvedAddress.textContent = currentConditions.resolvedAddress;
 
+  const temp = document.querySelector('#temp-current');
+  temp.textContent = toggleSwitch.checked
+    ? celciusToFahrenheit(currentConditions.temp)
+    : fahrenheitToCelcius(currentConditions.temp);
+
   const feelsLike = document.querySelector('#feels-like');
-  feelsLike.textContent = currentConditions.feelsLike;
+  feelsLike.textContent = toggleSwitch.checked
+    ? celciusToFahrenheit(currentConditions.feelsLike)
+    : fahrenheitToCelcius(currentConditions.feelsLike);
 
   const windSpeed = document.querySelector('#wind-speed');
-  windSpeed.textContent = currentConditions.windSpeed;
+  windSpeed.textContent = toggleSwitch.checked
+    ? kmToMiles(currentConditions.windspeed)
+    : milesToKm(currentConditions.windspeed);
 
   const precipProbCurrent = document.querySelector('#precip-prob-current-p');
   precipProbCurrent.textContent = currentConditions.precipProbCurrent;
@@ -35,12 +53,16 @@ export function displayValues(currentConditions, dayArray) {
     else date.textContent = day.date;
 
     const precipProb = document.createElement('p');
-    precipProb.textContent = `%${day.preciProb};`;
+    precipProb.textContent = `%${day.preciProb}`;
 
     const tempMax = document.createElement('p');
-    tempMax.textContent = `Max: ${day.tempmax}`;
+    tempMax.textContent = toggleSwitch.checked
+      ? `Max: ${celciusToFahrenheit(day.tempmax)}`
+      : `Max: ${fahrenheitToCelcius(day.tempmax)}`;
     const tempMin = document.createElement('p');
-    tempMin.textContent = `Min: ${day.tempmin}`;
+    tempMin.textContent = toggleSwitch.checked
+      ? `Min: ${celciusToFahrenheit(day.tempmin)}`
+      : `Min: ${fahrenheitToCelcius(day.tempmin)}`;
 
     dayContainer[index].append(conditions, date, precipProb, tempMax, tempMin);
   });
@@ -68,7 +90,9 @@ export function displayValues(currentConditions, dayArray) {
     precipProb.textContent = `%${currentHourData.preciProb}`;
 
     const temp = document.createElement('p');
-    temp.textContent = `${currentHourData.temp}`;
+    temp.textContent = toggleSwitch.checked
+      ? celciusToFahrenheit(currentHourData.temp)
+      : fahrenheitToCelcius(currentHourData.temp);
 
     currentHourIndex++;
     hourContainer[i].append(condition, time, precipProb, temp);

@@ -43,6 +43,7 @@ export function extractData(data) {
   const currentConditions = new CurrentConditions(
     data.currentConditions.conditions,
     data.resolvedAddress,
+    data.currentConditions.temp,
     data.currentConditions.feelslike,
     data.currentConditions.windspeed,
     data.currentConditions.humidity,
@@ -110,5 +111,28 @@ function roundDownValue(value) {
   }
   return Math.floor(parseFloat(value));
 }
+export function fahrenheitToCelcius(temp) {
+  return Math.round(((temp - 32) * 5) / 9);
+}
+export function celciusToFahrenheit(temp) {
+  return Math.round((temp * 9) / 5 + 32);
+}
+export function milesToKm(speed) {
+  return Math.round(speed * 1.60934);
+}
+export function kmToMiles(speed) {
+  return Math.round(speed * 0.6214);
+}
+const toggleSwitch = document.querySelector('#toggle-switch');
+toggleSwitch.addEventListener('change', function () {
+  if (this.checked) {
+    console.log('Switch is ON');
+  } else {
+    console.log('Switch is OFF');
+  }
+});
 
+// const data = await getWeatherData('istanbul');
+// console.log(data);
+// console.log(extractData(data));
 initializeFormHandler();
