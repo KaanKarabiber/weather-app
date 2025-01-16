@@ -1,6 +1,7 @@
 export function CurrentConditions(
   conditions,
   resolvedAddress,
+  temp,
   feelsLike,
   windspeed,
   humidity,
@@ -13,6 +14,7 @@ export function CurrentConditions(
 ) {
   this.conditions = conditions;
   this.resolvedAddress = resolvedAddress;
+  this.temp = temp;
   this.feelsLike = feelsLike;
   this.windspeed = windspeed;
   this.humidity = humidity;
