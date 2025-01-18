@@ -15,6 +15,10 @@ export async function initializeFormHandler() {
         const { currentConditions, dayArray } = extractData(data);
         chooseIcon(currentConditions, dayArray);
         displayValues(currentConditions, dayArray);
+        const event = new CustomEvent('weatherDataUpdated', {
+          detail: { currentConditions, dayArray },
+        });
+        document.dispatchEvent(event);
         inputText.value = '';
       } catch (error) {
         console.error('Error fetching data:', error);
