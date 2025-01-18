@@ -1,6 +1,7 @@
 import './styles.css';
 import { CurrentConditions, Days, Hours } from './constructorFunctions';
 import { initializeFormHandler } from './form';
+import './switchHandler';
 
 const WEATHERAPIKEY = 'GRUJ8YUSWV9C7U29H4QTGHSUX';
 
@@ -33,7 +34,7 @@ function getToday() {
 
   return today;
 }
-function changeIconCamelCase(icon) {
+export function changeIconCamelCase(icon) {
   const camelCaseIconId = icon
     .replace(/-([a-z])/g, (_, char) => char.toUpperCase())
     .replace(/-/g, '');
@@ -44,7 +45,10 @@ export function extractData(data) {
     data.currentConditions.conditions,
     data.resolvedAddress,
     data.currentConditions.temp,
+    data.currentConditions.temp,
     data.currentConditions.feelslike,
+    data.currentConditions.feelslike,
+    data.currentConditions.windspeed,
     data.currentConditions.windspeed,
     data.currentConditions.humidity,
     data.currentConditions.precipprob,
@@ -52,7 +56,7 @@ export function extractData(data) {
     data.currentConditions.sunrise,
     data.currentConditions.sunset,
     data.currentConditions.datetime,
-    changeIconCamelCase(data.currentConditions.icon)
+    data.currentConditions.icon
   );
   const dayArray = [];
 
@@ -64,8 +68,10 @@ export function extractData(data) {
       day.conditions,
       day.precipprob,
       day.tempmax,
+      day.tempmax,
       day.tempmin,
-      changeIconCamelCase(day.icon)
+      day.tempmin,
+      day.icon
     );
 
     day.hours.forEach((hour) => {
@@ -73,33 +79,20 @@ export function extractData(data) {
         hour.datetime,
         hour.precipprob,
         hour.temp,
+        hour.temp,
         hour.conditions,
         hour.icon
       );
-      hourObject.icon = changeIconCamelCase(hourObject.icon);
       hoursArray.push(hourObject);
     });
-
     dayObject.hours = hoursArray;
-
     dayArray.push(dayObject);
-  });
-  currentConditions.preciProb = roundDownValue(currentConditions.preciProb);
-
-  dayArray.forEach((day) => {
-    day.preciProb = roundDownValue(day.preciProb);
-    day.tempmax = roundDownValue(day.tempmax);
-    day.tempmin = roundDownValue(day.tempmin);
-
-    day.hours.forEach((hour) => {
-      hour.preciProb = roundDownValue(hour.preciProb);
-      hour.temp = roundDownValue(hour.temp);
-    });
   });
 
   return { currentConditions, dayArray };
 }
-function roundDownValue(value) {
+
+export function roundDownValue(value) {
   if (typeof value === 'number') {
     if (Number.isNaN(value)) {
       console.warn('Invalid number encountered: ', value);
@@ -114,25 +107,10 @@ function roundDownValue(value) {
 export function fahrenheitToCelcius(temp) {
   return Math.round(((temp - 32) * 5) / 9);
 }
-export function celciusToFahrenheit(temp) {
-  return Math.round((temp * 9) / 5 + 32);
-}
 export function milesToKm(speed) {
   return Math.round(speed * 1.60934);
 }
-export function kmToMiles(speed) {
-  return Math.round(speed * 0.6214);
-}
-const toggleSwitch = document.querySelector('#toggle-switch');
-toggleSwitch.addEventListener('change', function () {
-  if (this.checked) {
-    console.log('Switch is ON');
-  } else {
-    console.log('Switch is OFF');
-  }
-});
 
 // const data = await getWeatherData('istanbul');
-// console.log(data);
 // console.log(extractData(data));
 initializeFormHandler();
