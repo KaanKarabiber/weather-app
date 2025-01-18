@@ -43,28 +43,68 @@ export function displayValues(currentConditions, dayArray) {
 
   const dayContainer = document.querySelectorAll('.day-container');
   dayArray.forEach((day, index) => {
-    const conditions = document.createElement('p');
-    conditions.textContent = day.condition;
-    conditions.classList.add('day-conditions');
+    if (dayContainer[index].querySelector('.day-conditions')) {
+      dayContainer[index].querySelector('.day-conditions').textContent =
+        day.condition;
+    } else {
+      const conditions = document.createElement('p');
+      conditions.textContent = day.condition;
+      conditions.classList.add('day-conditions');
+      dayContainer[index].append(conditions);
+    }
 
-    const date = document.createElement('p');
-    if (index === 0) date.textContent = 'Today';
-    else if (index === 1) date.textContent = 'Tomorrow';
-    else date.textContent = day.date;
+    if (dayContainer[index].querySelector('.day-date')) {
+      const date = dayContainer[index].querySelector('.day-date');
+      if (index === 0) date.textContent = 'Today';
+      else if (index === 1) date.textContent = 'Tomorrow';
+      else date.textContent = day.date;
+    } else {
+      const date = document.createElement('p');
+      date.classList.add('day-date');
+      if (index === 0) date.textContent = 'Today';
+      else if (index === 1) date.textContent = 'Tomorrow';
+      else date.textContent = day.date;
+      dayContainer[index].append(date);
+    }
 
-    const precipProb = document.createElement('p');
-    precipProb.textContent = `%${day.preciProb}`;
+    if (dayContainer[index].querySelector('.precip-prob-day')) {
+      dayContainer[index].querySelector('.precip-prob-day').textContent =
+        `%${day.preciProb}`;
+    } else {
+      const precipProb = document.createElement('p');
+      precipProb.classList.add('precip-prob-day');
+      precipProb.textContent = `%${day.preciProb}`;
+      dayContainer[index].append(precipProb);
+    }
 
-    const tempMax = document.createElement('p');
-    tempMax.textContent = toggleSwitch.checked
-      ? `Max: ${celciusToFahrenheit(day.tempmax)}`
-      : `Max: ${fahrenheitToCelcius(day.tempmax)}`;
-    const tempMin = document.createElement('p');
-    tempMin.textContent = toggleSwitch.checked
-      ? `Min: ${celciusToFahrenheit(day.tempmin)}`
-      : `Min: ${fahrenheitToCelcius(day.tempmin)}`;
+    if (dayContainer[index].querySelector('.tempmax-day')) {
+      dayContainer[index].querySelector('.tempmax-day').textContent =
+        toggleSwitch.checked
+          ? `Max: ${celciusToFahrenheit(day.tempmax)}`
+          : `Max: ${fahrenheitToCelcius(day.tempmax)}`;
+    } else {
+      const tempMax = document.createElement('p');
+      tempMax.classList.add('tempmax-day');
+      tempMax.textContent = toggleSwitch.checked
+        ? `Max: ${celciusToFahrenheit(day.tempmax)}`
+        : `Max: ${fahrenheitToCelcius(day.tempmax)}`;
+      dayContainer[index].append(tempMax);
+    }
 
-    dayContainer[index].append(conditions, date, precipProb, tempMax, tempMin);
+    if (dayContainer[index].querySelector('.tempmin-day')) {
+      dayContainer[index].querySelector('.tempmin-day').textContent =
+        toggleSwitch.checked
+          ? `Min: ${celciusToFahrenheit(day.tempmin)}`
+          : `Min: ${fahrenheitToCelcius(day.tempmin)}`;
+    } else {
+      const tempMin = document.createElement('p');
+      tempMin.classList.add('tempmin-day');
+      tempMin.textContent = toggleSwitch.checked
+        ? `Min: ${celciusToFahrenheit(day.tempmin)}`
+        : `Min: ${fahrenheitToCelcius(day.tempmin)}`;
+
+      dayContainer[index].append(tempMin);
+    }
   });
   const hourContainer = document.querySelectorAll('.hour-container');
   const hoursToDisplay = 24;
@@ -80,21 +120,48 @@ export function displayValues(currentConditions, dayArray) {
     }
     const currentHourData = dayArray[currentDayIndex].hours[currentHourIndex];
 
-    const condition = document.createElement('p');
-    condition.textContent = currentHourData.condition;
+    if (hourContainer[i].querySelector('.condition-hour')) {
+      hourContainer[i].querySelector('.condition-hour').textContent =
+        currentHourData.condition;
+    } else {
+      const condition = document.createElement('p');
+      condition.classList.add('condition-hour');
+      condition.textContent = currentHourData.condition;
+      hourContainer[i].append(condition);
+    }
 
-    const time = document.createElement('p');
-    time.textContent = currentHourData.dateTime;
+    if (hourContainer[i].querySelector('.time-hour')) {
+      hourContainer[i].querySelector('.time-hour').textContent =
+        currentHourData.dateTime;
+    } else {
+      const time = document.createElement('p');
+      time.classList.add('time-hour');
+      time.textContent = currentHourData.dateTime;
+      hourContainer[i].append(time);
+    }
 
-    const precipProb = document.createElement('p');
-    precipProb.textContent = `%${currentHourData.preciProb}`;
-
-    const temp = document.createElement('p');
-    temp.textContent = toggleSwitch.checked
-      ? celciusToFahrenheit(currentHourData.temp)
-      : fahrenheitToCelcius(currentHourData.temp);
+    if (hourContainer[i].querySelector('.precip-prob-hour')) {
+      hourContainer[i].querySelector('.precip-prob-hour').textContent =
+        `%${currentHourData.preciProb}`;
+    } else {
+      const precipProb = document.createElement('p');
+      precipProb.classList.add('precip-prob-hour');
+      precipProb.textContent = `%${currentHourData.preciProb}`;
+      hourContainer[i].append(precipProb);
+    }
+    if (hourContainer[i].querySelector('.temp-hour')) {
+      temp.textContent = toggleSwitch.checked
+        ? celciusToFahrenheit(currentHourData.temp)
+        : fahrenheitToCelcius(currentHourData.temp);
+    } else {
+      const temp = document.createElement('p');
+      temp.classList.add('temp-hour');
+      temp.textContent = toggleSwitch.checked
+        ? celciusToFahrenheit(currentHourData.temp)
+        : fahrenheitToCelcius(currentHourData.temp);
+      hourContainer[i].append(temp);
+    }
 
     currentHourIndex++;
-    hourContainer[i].append(condition, time, precipProb, temp);
   }
 }
