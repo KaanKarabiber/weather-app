@@ -1,9 +1,4 @@
-import {
-  celciusToFahrenheit,
-  fahrenheitToCelcius,
-  milesToKm,
-  kmToMiles,
-} from './index.js';
+import './switchHandler';
 
 export function displayValues(currentConditions, dayArray) {
   const toggleSwitch = document.querySelector('#toggle-switch');
@@ -16,21 +11,24 @@ export function displayValues(currentConditions, dayArray) {
 
   const temp = document.querySelector('#temp-current');
   temp.textContent = toggleSwitch.checked
-    ? celciusToFahrenheit(currentConditions.temp)
-    : fahrenheitToCelcius(currentConditions.temp);
+    ? currentConditions.tempF
+    : currentConditions.tempC;
 
   const feelsLike = document.querySelector('#feels-like');
   feelsLike.textContent = toggleSwitch.checked
-    ? celciusToFahrenheit(currentConditions.feelsLike)
-    : fahrenheitToCelcius(currentConditions.feelsLike);
+    ? currentConditions.feelsLikeF
+    : currentConditions.feelsLikeC;
 
   const windSpeed = document.querySelector('#wind-speed');
   windSpeed.textContent = toggleSwitch.checked
-    ? kmToMiles(currentConditions.windspeed)
-    : milesToKm(currentConditions.windspeed);
+    ? currentConditions.windspeedMiles
+    : currentConditions.windspeedKm;
 
   const precipProbCurrent = document.querySelector('#precip-prob-current-p');
-  precipProbCurrent.textContent = currentConditions.precipProbCurrent;
+  precipProbCurrent.textContent = currentConditions.preciProb;
+
+  const descriptionCurrent = document.querySelector('#description-current-p');
+  descriptionCurrent.textContent = currentConditions.description;
 
   const sunrise = document.querySelector('#sunrise-p');
   sunrise.textContent = currentConditions.sunrise;
@@ -79,29 +77,25 @@ export function displayValues(currentConditions, dayArray) {
 
     if (dayContainer[index].querySelector('.tempmax-day')) {
       dayContainer[index].querySelector('.tempmax-day').textContent =
-        toggleSwitch.checked
-          ? `Max: ${celciusToFahrenheit(day.tempmax)}`
-          : `Max: ${fahrenheitToCelcius(day.tempmax)}`;
+        toggleSwitch.checked ? `Max: ${day.tempmaxF}` : `Max: ${day.tempmaxC}`;
     } else {
       const tempMax = document.createElement('p');
       tempMax.classList.add('tempmax-day');
       tempMax.textContent = toggleSwitch.checked
-        ? `Max: ${celciusToFahrenheit(day.tempmax)}`
-        : `Max: ${fahrenheitToCelcius(day.tempmax)}`;
+        ? `Max: ${day.tempmaxF}`
+        : `Max: ${day.tempmaxC}`;
       dayContainer[index].append(tempMax);
     }
 
     if (dayContainer[index].querySelector('.tempmin-day')) {
       dayContainer[index].querySelector('.tempmin-day').textContent =
-        toggleSwitch.checked
-          ? `Min: ${celciusToFahrenheit(day.tempmin)}`
-          : `Min: ${fahrenheitToCelcius(day.tempmin)}`;
+        toggleSwitch.checked ? `Min: ${day.tempminF}` : `Min: ${day.tempminC}`;
     } else {
       const tempMin = document.createElement('p');
       tempMin.classList.add('tempmin-day');
       tempMin.textContent = toggleSwitch.checked
-        ? `Min: ${celciusToFahrenheit(day.tempmin)}`
-        : `Min: ${fahrenheitToCelcius(day.tempmin)}`;
+        ? `Min: ${day.tempminF}`
+        : `Min: ${day.tempminC}`;
 
       dayContainer[index].append(tempMin);
     }
@@ -149,16 +143,16 @@ export function displayValues(currentConditions, dayArray) {
       precipProb.textContent = `%${currentHourData.preciProb}`;
       hourContainer[i].append(precipProb);
     }
+
     if (hourContainer[i].querySelector('.temp-hour')) {
-      temp.textContent = toggleSwitch.checked
-        ? celciusToFahrenheit(currentHourData.temp)
-        : fahrenheitToCelcius(currentHourData.temp);
+      hourContainer[i].querySelector('.temp-hour').textContent =
+        toggleSwitch.checked ? currentHourData.tempF : currentHourData.tempC;
     } else {
       const temp = document.createElement('p');
       temp.classList.add('temp-hour');
       temp.textContent = toggleSwitch.checked
-        ? celciusToFahrenheit(currentHourData.temp)
-        : fahrenheitToCelcius(currentHourData.temp);
+        ? currentHourData.tempF
+        : currentHourData.tempC;
       hourContainer[i].append(temp);
     }
 
