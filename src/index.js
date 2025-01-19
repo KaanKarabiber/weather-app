@@ -2,6 +2,8 @@ import './styles.css';
 import { CurrentConditions, Days, Hours } from './constructorFunctions';
 import { initializeFormHandler } from './form';
 import './switchHandler';
+import { chooseIcon } from './weatherIcons';
+import { displayValues } from './displayValues';
 
 const WEATHERAPIKEY = 'GRUJ8YUSWV9C7U29H4QTGHSUX';
 
@@ -110,7 +112,34 @@ export function fahrenheitToCelcius(temp) {
 export function milesToKm(speed) {
   return Math.round(speed * 1.60934);
 }
+const loadingSpinner = document.querySelector('#loading-spinner');
+const apiDataContainer = document.querySelector('#api-data');
+const dataContainer = document.querySelector('#data-container');
 
-// const data = await getWeatherData('istanbul');
-// console.log(extractData(data));
+async function initializeApp() {
+  dataContainer.style.display = 'none';
+  try {
+    dataContainer.style.display = 'flex';
+    loadingSpinner.style.display = 'block';
+    apiDataContainer.style.opacity = 0;
+
+    const data = await getWeatherData('istanbul');
+    const { currentConditions, dayArray } = extractData(data);
+    chooseIcon(currentConditions, dayArray);
+    displayValues(currentConditions, dayArray);
+
+    const event = new CustomEvent('weatherDataUpdated', {
+      detail: { currentConditions, dayArray },
+    });
+    document.dispatchEvent(event);
+  } catch (error) {
+    console.error('Error during data processing', error);
+    apiDataContainer.textContent = 'Error fetching data';
+  } finally {
+    loadingSpinner.style.display = 'none';
+    dataContainer.style.display = 'none';
+    apiDataContainer.classList.add('show-api-data');
+  }
+}
+initializeApp();
 initializeFormHandler();
