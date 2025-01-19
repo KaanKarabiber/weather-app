@@ -9,7 +9,6 @@ document.addEventListener('weatherDataUpdated', (event) => {
   const { currentConditions, dayArray } = event.detail;
   currentWeatherData = currentConditions;
   dayArrayData = dayArray;
-  console.log('Weather data updated:', currentWeatherData, dayArrayData);
 });
 
 toggleSwitch.addEventListener('change', function () {
